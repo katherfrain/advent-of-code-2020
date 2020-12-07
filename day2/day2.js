@@ -1,32 +1,46 @@
-const fs = require('fs')
+const fs = require('fs');
 
-function setYear(){
-    let thisDate = new Date; 
-    let thisYear = thisDate.getFullYear(); 
-    return thisYear;
-}
-setYear()
+function howManyPasswordsAreSecure(list) {
 
-//yes, it may be an overly verbose function name, but I prefer to know exactly what my functions do
- function checkIf3InputsSumToYear(fileinput) {
+    var rawPasswordList = fs.readFileSync(list, 'utf8');
+    var preppedPasswordList = rawPasswordList.split('\n')
+    let answer = preppedPasswordList.length;
 
-    var rawFileInput = fs.readFileSync(fileinput, 'utf8');
-    var preppedFileList = rawFileInput.split('\n');
+    for (let x = 0; x < preppedPasswordList.length; x++) {
 
-    for (let x = 0; x < preppedFileList.length; x++) {
-        for (let j = 0; j < preppedFileList.length; j++) {
-            for(let y=0; y<preppedFileList.length; y++) {
-       
-            let pointA = parseInt(preppedFileList[x])
-            let pointB = parseInt(preppedFileList[j])
-            let pointC = parseInt(preppedFileList[y])
-   
-       
-            if (pointA + pointB + pointC == setYear()) {
-                return pointA * pointB
-            }
+        let rawChosen = preppedPasswordList[x]
+        let chosenRulesAndPassword = rawChosen.split(':')
+
+        let chosenRules = chosenRulesAndPassword[0];
+        let chosenPassword = chosenRulesAndPassword[1]
+
+
+        let chosenMinReq = chosenRules.split('-')[0]
+        let arrangedSplit = chosenRules.split('-')[1]
+        let chosenMaxReq = arrangedSplit.split(' ')[0]
+        
+        
+        console.log('chosenMaxReq:', chosenMaxReq)
+
+        let chosenLetter = chosenRules[chosenRules.length - 1]
+    
+
+        let chosenLettersInPassword = 0
+        let preppedPassword = chosenPassword.split('')
+
+        for (let y = 0; y < preppedPassword.length; y++) {
+            console.log(chosenLetter)
+            if (preppedPassword[y] === chosenLetter) {
+                chosenLettersInPassword = chosenLettersInPassword + 1
+            }   
         }
+        if (chosenLettersInPassword > chosenMaxReq || chosenLettersInPassword < chosenMinReq) {
+            console.log(`the min req on this is ${chosenMinReq}, the max req is ${chosenMaxReq}, and the # of the chosen letter in this password is ${chosenLettersInPassword}, so the answer is ${answer}`)
+            answer = answer - 1;
         }
+
     }
+    return answer;
 }
-console.log(checkIf3InputsSumToYear('./input'))
+
+console.log(howManyPasswordsAreSecure('./input'))
