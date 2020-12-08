@@ -1,44 +1,63 @@
 const fs = require('fs');
 
-function howManyPasswordsAreSecure(list) {
 
-    var rawPasswordList = fs.readFileSync(list, 'utf8');
-    var preppedPasswordList = rawPasswordList.split('\n')
-    let answer = preppedPasswordList.length;
+function prepareRules(list) {
 
-    for (let x = 0; x < preppedPasswordList.length; x++) {
+    let preppedRulesList = [];
 
-        let rawChosen = preppedPasswordList[x]
-        let chosenRulesAndPassword = rawChosen.split(':')
+    for (let x = 0; x < list.length; x++) {
 
-        let chosenRules = chosenRulesAndPassword[0];
-        let chosenPassword = chosenRulesAndPassword[1]
+        let chosenRules = list[x].split(':')[0];
 
+        let breakOffMinReq = chosenRules.split('-');
+        let minReq = breakOffMinReq[0];
 
-        let chosenMinReq = chosenRules.split('-')[0]
-        let arrangedSplit = chosenRules.split('-')[1]
-        let chosenMaxReq = arrangedSplit.split(' ')[0]
-        
-        
-        console.log('chosenMaxReq:', chosenMaxReq)
+        let breakOffMaxReq = breakOffMinReq[1].split(' ');
+        let maxReq = breakOffMaxReq[0];
 
-        let chosenLetter = chosenRules[chosenRules.length - 1]
-    
+        let chosenLetter = breakOffMaxReq[1];
 
-        let chosenLettersInPassword = 0
-        let preppedPassword = chosenPassword.split('')
+        preppedRulesList.push([minReq, maxReq, chosenLetter]);
 
-        for (let y = 0; y < preppedPassword.length; y++) {
-            console.log(chosenLetter)
-            if (preppedPassword[y] === chosenLetter) {
-                chosenLettersInPassword = chosenLettersInPassword + 1
-            }   
+    } return preppedRulesList
+}
+function preparePassword(list) {
+
+    let preppedPasswordList = []
+    for (let x = 0; x < list.length; x++) {
+        let chosenPassword = list[x].split(':')[1].split('');
+        preppedPasswordList.push(chosenPassword);
+    }
+    return preppedPasswordList;
+
+}
+function howManyPasswordsAreSecure(file) {
+
+    var rawList = fs.readFileSync(file, 'utf8');
+    var preppedList = rawList.split('\n');
+
+    let preppedRules = prepareRules(preppedList);
+    let preppedPassword = preparePassword(preppedList);
+
+    let answer = 0;
+
+    for (let x = 0; x < preppedList.length; x++) {
+
+        let requiredLettersinPassword = 0;
+        let thisPassword = preppedPassword[x];
+
+        let minReq = preppedRules[x][0]
+        let maxReq = preppedRules[x][1]
+        let chosenLetter = preppedRules[x][2]
+
+        for (let y = 0; y < thisPassword.length; y++) {
+            if (thisPassword[y] === chosenLetter) {     
+                requiredLettersinPassword = requiredLettersinPassword + 1
+            }
         }
-        if (chosenLettersInPassword > chosenMaxReq || chosenLettersInPassword < chosenMinReq) {
-            console.log(`the min req on this is ${chosenMinReq}, the max req is ${chosenMaxReq}, and the # of the chosen letter in this password is ${chosenLettersInPassword}, so the answer is ${answer}`)
-            answer = answer - 1;
-        }
-
+        if (requiredLettersinPassword >= minReq && requiredLettersinPassword <= maxReq) {
+                answer = answer + 1
+        }            
     }
     return answer;
 }
