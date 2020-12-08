@@ -26,6 +26,7 @@ function preparePassword(list) {
     for (let x = 0; x < list.length; x++) {
         //because this introduces a , in the 0 place, everything can proceed w/o accounting for the off-by-one error
         let chosenPassword = list[x].split(':')[1].split('');
+        console.log(chosenPassword)
         preppedPasswordList.push(chosenPassword);
     }
     return preppedPasswordList;
