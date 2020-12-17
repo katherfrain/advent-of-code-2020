@@ -15,17 +15,19 @@ function prepareFile(file) {
 
 function validPassports(file) {
     let arrayOfPassPortArrays = prepareFile(file);
+    console.log(arrayOfPassPortArrays)
     for(let x = 0; x < arrayOfPassPortArrays.length; x++) {
-        console.log(x)
-        let splitOnColon = arrayOfPassPortArrays[x].split(':');
-        for(let y = 0; y < splitOnColon.length; y++) {
-        if(splitOnColon[0].includes(/(byr)/) 
-        && arrayOfPassPortArrays[x].includes('iyr')) {
-            console.log('dude')
-        }
+        
+        // console.log(arrayOfPassportArrays[x])
+        // let splitOnColon = arrayOfPassPortArrays[x].split(':');
+        // for(let y = 0; y < splitOnColon.length; y++) {
+        // if(splitOnColon[0].includes(/(byr)/) 
+        // && arrayOfPassPortArrays[x].includes('iyr')) {
+        //     console.log('dude')
+        // }
         }
 
     }
-}
+
 
 console.log(validPassports('./input'))
