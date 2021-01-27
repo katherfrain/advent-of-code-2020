@@ -29,8 +29,8 @@ function preparePassword(list) {
         preppedPasswordList.push(chosenPassword);
     }
     return preppedPasswordList;
-
 }
+
 function howManyPasswordsAreSecure(file) {
 
     var rawList = fs.readFileSync(file, 'utf8');

@@ -12,21 +12,24 @@ function prepareFile(file) {
     return fullyPreppedFile;
 }
 
+function validateBYR(passportInput) {
+
+}
 
 function validPassports(file) {
     var arrayOfPassPortArrays = prepareFile(file);
     let passedPorts = [];
+
     for (let x = 0; x < arrayOfPassPortArrays.length; x++) {
         let thisPassport = arrayOfPassPortArrays[x];
-
         let passNum = 0;
+
         for (let j = 0; j < thisPassport.length; j++) {
-
-
             let thisPassportCategory = thisPassport[j].split(':')[0];
             let thisPassportValue = thisPassport[j].split(':')[1]
 
             if (thisPassportCategory === 'byr') {
+
                 if (parseInt(thisPassportValue) >= 1920 && parseInt(thisPassportValue) <= 2020) {
                     passNum = passNum + 1;
                 }
